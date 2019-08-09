@@ -1,11 +1,11 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { browserHistory } from 'react-router';
+
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 
 class Signup extends React.Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class Signup extends React.Component {
     const password = this.state.password.trim();
 
     firebaseApp.auth().createUserWithEmailAndPassword(email, password).then((user) => {
-      browserHistory.push('/polls/dashboard');
+      this.props.history.push('/polls/dashboard');
     }).catch((error) => {
       if (error.code === 'auth/weak-password') {
         this.setState({ passwordError: error.message, emailError: '' });
@@ -79,7 +79,7 @@ class Signup extends React.Component {
               />
 
               <br /><br />
-              <RaisedButton
+              <Button variant="contained"
                 label="Signup"
                 type="submit"
                 primary={true}

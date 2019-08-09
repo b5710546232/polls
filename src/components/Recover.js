@@ -2,9 +2,9 @@ import React from 'react';
 import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 
 class Recover extends React.Component {
   constructor(props) {
@@ -50,7 +50,7 @@ class Recover extends React.Component {
           />
 
         <br /><br />
-        <RaisedButton
+        <Button variant="contained"
           label="Send Verification Email"
           type="submit"
           primary={true}

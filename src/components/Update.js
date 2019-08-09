@@ -1,13 +1,13 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { browserHistory } from 'react-router';
+
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 
 class Update extends React.Component {
@@ -26,7 +26,7 @@ class Update extends React.Component {
         this.formIsInvalid = this.formIsInvalid.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
 
         this.pollRef = firebaseApp.database().ref(`polls/${this.props.params.pollId}`);
         this.pollRef.on('value', ((snapshot) => {
@@ -79,7 +79,7 @@ class Update extends React.Component {
 
         firebaseApp.database().ref().update(updates);
 
-        browserHistory.push(`/polls/poll/${this.props.params.pollId}`);
+        this.props.history.push(`/polls/poll/${this.props.params.pollId}`);
     }
 
     handleAddOption() {
@@ -129,19 +129,19 @@ class Update extends React.Component {
                             {options}
 
                             <br />
-                            <FloatingActionButton
+                            <Fab
                                 mini={true}
                                 secondary={true}
-                                onTouchTap={this.handleAddOption} >
-                                <ContentAdd />
-                            </FloatingActionButton>
+                                onClick={this.handleAddOption} >
+                                <Icon>add</Icon>
+                            </Fab>
 
                             <br /><br />
-                            <RaisedButton
+                            <Button variant="contained"
                                 label="Update"
                                 type="submit"
                                 primary={true}
-                                />
+                            />
                         </form>
                         <br /><br />
                     </Paper>

@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { ThemeProvider } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import { createMuiTheme } from '@material-ui/core/styles';
 
-const muiTheme = getMuiTheme({
+const muiTheme = createMuiTheme({
     fontFamily: 'Roboto, sans-serif',
     palette: {
         primary1Color: '#DC3912',
@@ -25,7 +25,7 @@ class App extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         firebaseApp.auth().onAuthStateChanged(user => {
             this.setState({
                 loggedIn: (null !== user) //user is null when not loggedin 
@@ -36,7 +36,7 @@ class App extends React.Component {
     handleLogout() {
         firebaseApp.auth().signOut().then(() => {
             //console.log("sign out succesful");
-            browserHistory.push('/polls/');
+            this.props.history.push('/polls/');
         }, (error) => {
             console.log(error);
         });
@@ -45,7 +45,7 @@ class App extends React.Component {
     render() {
 
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
+            <ThemeProvider theme={muiTheme}>
                 <div className="container">
 
                     <div className="row">
@@ -54,10 +54,10 @@ class App extends React.Component {
                             <br />
                             {this.state.loggedIn ?
                                 <Link to="/polls/dashboard">
-                                    <FlatButton
+                                    <Button
                                         label="My Polls"
                                         primary={true}
-                                        />
+                                    />
                                 </Link>
                                 : ''}
                         </div>
@@ -65,11 +65,11 @@ class App extends React.Component {
                         <div className="col-sm-6 text-xs-right">
                             <br />
                             {this.state.loggedIn ?
-                                <FlatButton
+                                <Button
                                     onClick={this.handleLogout}
                                     label="Logout"
                                     secondary={true}
-                                    />
+                                />
                                 : ''}
                         </div>
 
@@ -92,16 +92,16 @@ class App extends React.Component {
                         <div className="col-sm-12 text-xs-center">
                             <br />
                             <a href="https://github.com/sebnun/polls">
-                                <FlatButton
+                                <Button
                                     label="Source Code"
-                                    icon={<FontIcon className="fa fa-github" />}
-                                    />
+                                    icon={<Icon className="fa fa-github" />}
+                                />
                             </a>
                         </div>
                     </div>
 
                 </div>
-            </MuiThemeProvider>
+            </ThemeProvider>
 
         );
     }

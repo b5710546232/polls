@@ -1,14 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
-import Dialog from 'material-ui/Dialog';
-import Paper from 'material-ui/Paper';
-import Divider from 'material-ui/Divider';
+
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Dialog from '@material-ui/core/Dialog';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
 import Loading from './Loading';
 
 class Dashboard extends React.Component {
@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         //const uid = getLocalUserId();
 
         firebaseApp.auth().onAuthStateChanged(user => {
@@ -113,16 +113,16 @@ class Dashboard extends React.Component {
     render() {
 
         const actions = [
-            <FlatButton
+            <Button
                 label="Cancel"
                 primary={false}
-                onTouchTap={this.handleClose}
-                />,
-            <FlatButton
+                onClick={this.handleClose}
+            />,
+            <Button
                 label="Delete"
                 primary={true}
-                onTouchTap={this.handleDelete}
-                />,
+                onClick={this.handleDelete}
+            />,
         ];
 
         let pollsUIs = this.state.polls.map((poll) => {
@@ -132,14 +132,14 @@ class Dashboard extends React.Component {
                     <IconButton
                         iconClassName="fa fa-trash"
                         tooltip={<span>Delete</span>}
-                        onTouchTap={() => this.handleOpen(poll.id)}
+                        onClick={() => this.handleOpen(poll.id)}
 
-                        />
+                    />
                     <Link to={`/polls/poll/${poll.id}`}>
-                        <FlatButton
+                        <Button
                             label={poll.title}
                             style={{ textAlign: 'left', width: '50%' }}
-                            />
+                        />
                     </Link>
                     <Divider />
 
@@ -164,15 +164,15 @@ class Dashboard extends React.Component {
                             modal={false}
                             open={this.state.dialogOpen}
                             onRequestClose={this.handleClose}
-                            >
+                        >
                             Delete "{this.poll2DeleteTitle}"?
                     </Dialog>
 
                         <Link to="/polls/new">
-                            <RaisedButton
+                            <Button variant="contained"
                                 label="New Poll"
                                 primary={true}
-                                />
+                            />
                         </Link>
                         <br /><br />
 

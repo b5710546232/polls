@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
 import * as firebase from 'firebase'; //needed for fb, google providers
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 
 class Home extends React.Component {
 
@@ -15,7 +15,7 @@ class Home extends React.Component {
     const provider = new firebase.auth.FacebookAuthProvider();
     firebaseApp.auth().signInWithPopup(provider).then((result) => {
       //console.log('Facebook login success');
-      browserHistory.push('/polls/dashboard');
+      this.props.history.push('/polls/dashboard');
     }).catch((error) => {
       console.log(error);
     });
@@ -26,7 +26,7 @@ class Home extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebaseApp.auth().signInWithPopup(provider).then((result) => {
       //console.log('Google login success');
-      browserHistory.push('/polls/dashboard');
+      this.props.history.push('/polls/dashboard');
     }).catch((error) => {
       console.log(error);
     });
@@ -45,51 +45,49 @@ class Home extends React.Component {
             <h2>Create and share polls, fast and easy. View results in real time!</h2>
 
             <br /><br />
-            <RaisedButton
+            <Button variant="contained"
               label="Login with Facebook"
-              onTouchTap={this.handleFacebook}
-              secondary={true}
-              icon={<FontIcon className="fa fa-facebook-f" />}
+              onClick={this.handleFacebook}
+              color="secondary"
               className="buttonWidth"
-              />
-
+            ><Icon className="fa fa-facebook-f" /></Button>
             <br /><br />
-            <RaisedButton
+            <Button variant="contained"
               label="Login with Google"
-              onTouchTap={this.handleGoogle}
-              secondary={true}
-              icon={<FontIcon className="fa fa-google" />}
+              onClick={this.handleGoogle}
+              color="secondary"
               className="buttonWidth"
-              />
+            ><Icon className="fa fa-google" /></Button>
+            {/* 
 
             <br /><br />
             <Link to="/polls/login">
-              <RaisedButton
+              <Button variant="contained"
                 label="Login with Email"
-                secondary={true}
-                icon={<FontIcon className="fa fa-envelope-o" />}
+                color="secondary"
+                icon={<Icon className="fa fa-envelope-o" />}
                 className="buttonWidth"
-                />
+              />
             </Link>
             <br /><br />
             <Link to="/polls/signup">
-              <RaisedButton
+              <Button variant="contained"
                 label="Sign Up"
                 primary={true}
                 className="buttonWidth"
-                />
+              />
             </Link>
             <br /><br />
-            <br /><br />
+            <br /><br /> */}
           </Paper>
 
         </div>
-      </div>
+      </div >
 
     );
   }
 }
 
 
-export default Home;
+export default withRouter(Home);
 

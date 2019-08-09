@@ -1,12 +1,12 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { browserHistory } from 'react-router';
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Paper from 'material-ui/Paper';
+
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 import Helmet from "react-helmet";
 
 class New extends React.Component {
@@ -71,7 +71,7 @@ class New extends React.Component {
 
         firebaseApp.database().ref().update(updates);
 
-        browserHistory.push(`/polls/poll/${newPollKey}`);
+        this.props.history.push(`/polls/poll/${newPollKey}`);
     }
 
     handleAddOption() {
@@ -92,7 +92,7 @@ class New extends React.Component {
                         value={this.state.options[i].option}
                         onChange={this.handleOptionChange.bind(this, i)}
                         errorText={this.state.options[i].optionError}
-                        />
+                    />
                 </div>
             );
         });
@@ -114,24 +114,24 @@ class New extends React.Component {
                                 value={this.state.title}
                                 onChange={this.handleTitleChange}
                                 errorText={this.state.titleError}
-                                />
+                            />
 
                             {options}
 
                             <br />
-                            <FloatingActionButton
+                            <Fab
                                 mini={true}
                                 secondary={true}
-                                onTouchTap={this.handleAddOption} >
-                                <ContentAdd />
-                            </FloatingActionButton>
+                                onClick={this.handleAddOption} >
+                                <Icon>add</Icon>
+                            </Fab>
 
                             <br /><br />
-                            <RaisedButton
+                            <Button variant="contained"
                                 label="Create"
                                 type="submit"
                                 primary={true}
-                                />
+                            />
                         </form>
 
                         <br /><br />

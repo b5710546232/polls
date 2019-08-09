@@ -1,12 +1,11 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 
 class Login extends React.Component {
   constructor(props) {
@@ -38,7 +37,7 @@ class Login extends React.Component {
     const password = this.state.password.trim();
 
     firebaseApp.auth().signInWithEmailAndPassword(email, password).then((user) => {
-      browserHistory.push('/polls/dashboard');
+      this.props.history.push('/polls/dashboard');
     }).catch((error) => {
 
       if (error.code === 'auth/wrong-password') {
@@ -71,7 +70,7 @@ class Login extends React.Component {
                 value={this.state.email}
                 onChange={this.handleEmailChange}
                 errorText={this.state.emailError}
-                />
+              />
 
               <br /><br />
               <TextField
@@ -80,22 +79,22 @@ class Login extends React.Component {
                 onChange={this.handlePasswordChange}
                 type="password"
                 errorText={this.state.passwordError}
-                />
+              />
 
               <br /><br />
-              <RaisedButton
+              <Button variant="contained"
                 label="Login"
                 type="submit"
                 primary={true}
-                />
+              />
 
             </form>
 
             <br />
             <Link to="/polls/recover">
-              <FlatButton
+              <Button
                 label="Forgot your password?"
-                />
+              />
             </Link>
 
             <br /><br />
