@@ -2,9 +2,9 @@ import React from 'react';
 import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
 
 class Recover extends React.Component {
   constructor(props) {
@@ -43,18 +43,19 @@ class Recover extends React.Component {
         <h2>We'll send you an email to reset your password.</h2>
 
         <TextField
-          floatingLabelText="Email"
+          label="Email"
           value={this.state.email}
           onChange={this.handleEmailChange}
           errorText={this.state.emailError}
           />
 
         <br /><br />
-        <RaisedButton
-          label="Send Verification Email"
+        <Button variant="contained"
           type="submit"
-          primary={true}
-          />
+          color="primary"
+          >
+            Send Verification Email
+            </Button>
 
       </form>
     );

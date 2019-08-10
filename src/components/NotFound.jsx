@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from "react-helmet";
 
-import Paper from 'material-ui/Paper';
+import Paper from '@material-ui/core/Paper';
 
 const NotFound = () =>
     <div className="row">

@@ -2,13 +2,15 @@ import React from 'react';
 import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 import { Chart } from 'react-google-charts';
 import Loading from './Loading';
+
+import { withRouter } from "react-router-dom";
 
 class Poll extends React.Component {
     constructor(props) {
@@ -17,14 +19,14 @@ class Poll extends React.Component {
         this.state = {
             title: '',
             options: [], //of the form [{'some option': 34}]
-            voted: localStorage.getItem(this.props.params.pollId) ? true : false,
+            voted: localStorage.getItem(this.props.match.params.pollId) ? true : false,
             showSnackbar: false,
             loading: true
         };
     }
 
-    componentWillMount() {
-        this.pollRef = firebaseApp.database().ref(`polls/${this.props.params.pollId}`);
+    componentDidMount() {
+        this.pollRef = firebaseApp.database().ref(`polls/${this.props.match.params.pollId}`);
         this.pollRef.on('value', ((snapshot) => {
             const dbPoll = snapshot.val();
 
@@ -48,8 +50,8 @@ class Poll extends React.Component {
             return o.hasOwnProperty(option);
         })[0][option];
 
-        firebaseApp.database().ref().update({ [`polls/${this.props.params.pollId}/${option}`]: currentCount += 1 })
-        localStorage.setItem(this.props.params.pollId, 'true');
+        firebaseApp.database().ref().update({ [`polls/${this.props.match.params.pollId}/${option}`]: currentCount += 1 })
+        localStorage.setItem(this.props.match.params.pollId, 'true');
         this.setState({ voted: true, showSnackbar: true });
     }
 
@@ -67,13 +69,12 @@ class Poll extends React.Component {
         if (isAuthUser) {
             addOptionUI = (
                 <div>
-                    <a href={`/polls/update/${this.props.params.pollId}`} >
-                        <FloatingActionButton
-                            mini={true}
-                            secondary={true}
-                            >
-                            <ContentAdd />
-                        </FloatingActionButton>
+                    <a href={`/polls/update/${this.props.match.params.pollId}`} >
+                        <Fab
+                            color="secondary"
+                        >
+                            <Icon className="fa fa-plus"></Icon>
+                        </Fab>
                     </a>
                 </div>
             );
@@ -82,13 +83,14 @@ class Poll extends React.Component {
         let optionsUI = this.state.options.map(option => {
             return (
                 <div key={Object.keys(option)[0]}>
-                    <RaisedButton
-                        label={Object.keys(option)[0]}
-                        onTouchTap={() => this.handleVote(Object.keys(option)[0])}
+                    <Button variant="contained"
+                        onClick={() => this.handleVote(Object.keys(option)[0])}
                         style={{ width: '90%' }}
                         disabled={this.state.voted}
-                        secondary={true}
-                        />
+                        color="secondary"
+                    >
+                        {Object.keys(option)[0]}
+                    </Button>
                     <br /><br />
                 </div>
             );
@@ -104,7 +106,7 @@ class Poll extends React.Component {
                         open={this.state.showSnackbar}
                         message="Thanks for your vote!"
                         autoHideDuration={4000}
-                        />
+                    />
 
                     <Paper>
                         <br /><br />
@@ -124,7 +126,7 @@ class Poll extends React.Component {
                             width="100%"
                             data={data}
                             options={{ is3D: 'true' }}
-                            />
+                        />
 
                         <br /><br />
 

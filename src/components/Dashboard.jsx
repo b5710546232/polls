@@ -1,14 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
-import Dialog from 'material-ui/Dialog';
-import Paper from 'material-ui/Paper';
-import Divider from 'material-ui/Divider';
+
+import Button from '@material-ui/core/Button';
+import {IconButton,Icon,Paper,Divider,DialogTitle,DialogActions,Dialog} from '@material-ui/core';
+
 import Loading from './Loading';
 
 class Dashboard extends React.Component {
@@ -29,7 +27,7 @@ class Dashboard extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         //const uid = getLocalUserId();
 
         firebaseApp.auth().onAuthStateChanged(user => {
@@ -113,33 +111,38 @@ class Dashboard extends React.Component {
     render() {
 
         const actions = [
-            <FlatButton
-                label="Cancel"
-                primary={false}
-                onTouchTap={this.handleClose}
-                />,
-            <FlatButton
-                label="Delete"
-                primary={true}
-                onTouchTap={this.handleDelete}
-                />,
+            <Button
+                key="cancel"
+             color="primary"
+                onClick={this.handleClose}
+            >
+                Cancel
+                </Button>,
+            <Button
+            key="delete"
+            color="secondary"
+                onClick={this.handleDelete}
+            >
+                Delete
+            </Button>,
         ];
 
         let pollsUIs = this.state.polls.map((poll) => {
             return (
                 <div key={poll.id} >
-
                     <IconButton
-                        iconClassName="fa fa-trash"
                         tooltip={<span>Delete</span>}
-                        onTouchTap={() => this.handleOpen(poll.id)}
+                        onClick={() => this.handleOpen(poll.id)}
 
-                        />
+                    >
+                    <Icon className="fa fa-trash"/>
+                    </IconButton>
                     <Link to={`/polls/poll/${poll.id}`}>
-                        <FlatButton
-                            label={poll.title}
+                        <Button
                             style={{ textAlign: 'left', width: '50%' }}
-                            />
+                        >
+                            {poll.title}
+                        </Button>
                     </Link>
                     <Divider />
 
@@ -160,19 +163,24 @@ class Dashboard extends React.Component {
                         <br />
 
                         <Dialog
-                            actions={actions}
                             modal={false}
                             open={this.state.dialogOpen}
                             onRequestClose={this.handleClose}
-                            >
-                            Delete "{this.poll2DeleteTitle}"?
+                        >
+                            <DialogTitle id="alert-dialog-title">Delete "{this.poll2DeleteTitle}"?</DialogTitle>
+                            <DialogActions>
+         {actions}
+        </DialogActions>
+
                     </Dialog>
 
                         <Link to="/polls/new">
-                            <RaisedButton
-                                label="New Poll"
-                                primary={true}
-                                />
+                            <Button variant="contained"
+                                color="primary"
+                            >
+                                New Poll
+                            </Button>
+
                         </Link>
                         <br /><br />
 

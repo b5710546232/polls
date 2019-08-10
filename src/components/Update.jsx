@@ -1,13 +1,13 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { browserHistory } from 'react-router';
+
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 import Loading from './Loading';
 
 class Update extends React.Component {
@@ -26,9 +26,9 @@ class Update extends React.Component {
         this.formIsInvalid = this.formIsInvalid.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
 
-        this.pollRef = firebaseApp.database().ref(`polls/${this.props.params.pollId}`);
+        this.pollRef = firebaseApp.database().ref(`polls/${this.props.match.params.pollId}`);
         this.pollRef.on('value', ((snapshot) => {
             const dbPoll = snapshot.val();
 
@@ -74,12 +74,12 @@ class Update extends React.Component {
         const updates = {};
 
         newOptionsArray.forEach(option => {
-            updates[`polls/${this.props.params.pollId}/${option}`] = 0;
+            updates[`polls/${this.props.match.params.pollId}/${option}`] = 0;
         });
 
         firebaseApp.database().ref().update(updates);
 
-        browserHistory.push(`/polls/poll/${this.props.params.pollId}`);
+        this.props.history.push(`/polls/poll/${this.props.match.params.pollId}`);
     }
 
     handleAddOption() {
@@ -95,10 +95,11 @@ class Update extends React.Component {
                 <div key={i}>
                     <br />
                     <TextField
-                        floatingLabelText={`Option ${i + 1}`}
+                        label={`Option ${i + 1}`}
                         value={this.state.options[i].option}
                         onChange={this.handleOptionChange.bind(this, i)}
-                        errorText={this.state.options[i].optionError}
+                        error={this.state.options[i].optionError!==''}
+                        helperText={this.state.options[i].optionError}
                         disabled={i < this.state.originalCount ? true : false}
                         autoFocus={i === this.state.originalCount ? true : false} //focus on the new element for better user experience
                     />
@@ -121,7 +122,7 @@ class Update extends React.Component {
                         <form onSubmit={this.handleSubmit}>
 
                             <TextField
-                                floatingLabelText="Title"
+                                label="Title"
                                 value={this.state.title}
                                 disabled={true}
                             />
@@ -129,19 +130,19 @@ class Update extends React.Component {
                             {options}
 
                             <br />
-                            <FloatingActionButton
-                                mini={true}
-                                secondary={true}
-                                onTouchTap={this.handleAddOption} >
-                                <ContentAdd />
-                            </FloatingActionButton>
+                            <Fab
+                                color="secondary"
+                                onClick={this.handleAddOption} >
+                                <Icon className="fa fa-plus"></Icon>
+                            </Fab>
 
                             <br /><br />
-                            <RaisedButton
-                                label="Update"
+                            <Button variant="contained"
                                 type="submit"
-                                primary={true}
-                                />
+                                color="primary"
+                            >
+                                Update
+                            </Button>
                         </form>
                         <br /><br />
                     </Paper>

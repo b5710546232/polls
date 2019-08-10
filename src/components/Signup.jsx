@@ -1,11 +1,12 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { browserHistory } from 'react-router';
+
 import Helmet from "react-helmet";
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
+import Button from '@material-ui/core/Button';
+import {TextField,FormControl,Input,InputLabel,FormHelperText} from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import { withRouter } from "react-router-dom";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class Signup extends React.Component {
     const password = this.state.password.trim();
 
     firebaseApp.auth().createUserWithEmailAndPassword(email, password).then((user) => {
-      browserHistory.push('/polls/dashboard');
+      this.props.history.push('/polls/dashboard');
     }).catch((error) => {
       if (error.code === 'auth/weak-password') {
         this.setState({ passwordError: error.message, emailError: '' });
@@ -60,30 +61,33 @@ class Signup extends React.Component {
             <h2>Signup</h2>
 
             <form onSubmit={this.handleSubmit}>
-
               <TextField
-                floatingLabelText="Email"
+               margin="normal"
+              error={this.state.emailError!==''}
+                label="Email"
                 value={this.state.email}
                 onChange={this.handleEmailChange}
-                errorText={this.state.emailError}
+                helperText={this.state.emailError}
               />
 
               <br /><br />
 
               <TextField
-                floatingLabelText="Password"
+                label="Password"
                 value={this.state.password}
                 onChange={this.handlePasswordChange}
                 type="password"
-                errorText={this.state.passwordError}
+                error={this.state.passwordError!==''}
+                helperText={this.state.passwordError}
               />
 
               <br /><br />
-              <RaisedButton
-                label="Signup"
+              <Button variant="contained"
                 type="submit"
-                primary={true}
-              />
+                color="primary"
+              >
+              Signup
+              </Button>
 
             </form>
             <br /><br />

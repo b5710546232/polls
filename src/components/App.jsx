@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link,withRouter } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
+import { ThemeProvider } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import { createMuiTheme } from '@material-ui/core/styles';
+import AppRouter from './Router'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/FontIcon';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
-const muiTheme = getMuiTheme({
+const muiTheme = createMuiTheme({
     fontFamily: 'Roboto, sans-serif',
     palette: {
         primary1Color: '#DC3912',
@@ -23,9 +23,11 @@ class App extends React.Component {
         this.state = {
             loggedIn: (null !== firebaseApp.auth().currentUser) //currentUser is null when not loggedin 
         };
+        this.handleLogout = this.handleLogout.bind(this)
+        console.log(this.props.history)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         firebaseApp.auth().onAuthStateChanged(user => {
             this.setState({
                 loggedIn: (null !== user) //user is null when not loggedin 
@@ -36,16 +38,16 @@ class App extends React.Component {
     handleLogout() {
         firebaseApp.auth().signOut().then(() => {
             //console.log("sign out succesful");
-            browserHistory.push('/polls/');
+            this.props.history.push('/');
         }, (error) => {
             console.log(error);
         });
     }
 
     render() {
-
+        // console.log(`this.props.children`, this.props.children)
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
+            <ThemeProvider theme={muiTheme}>
                 <div className="container">
 
                     <div className="row">
@@ -54,10 +56,11 @@ class App extends React.Component {
                             <br />
                             {this.state.loggedIn ?
                                 <Link to="/polls/dashboard">
-                                    <FlatButton
-                                        label="My Polls"
-                                        primary={true}
-                                        />
+                                    <Button
+                                        color="primary"
+                                    >
+                                        My Polls
+                                    </Button>
                                 </Link>
                                 : ''}
                         </div>
@@ -65,11 +68,12 @@ class App extends React.Component {
                         <div className="col-sm-6 text-xs-right">
                             <br />
                             {this.state.loggedIn ?
-                                <FlatButton
+                                <Button
                                     onClick={this.handleLogout}
-                                    label="Logout"
-                                    secondary={true}
-                                    />
+                                    color="secondary"
+                                >
+                                    Logout
+                                    </Button>
                                 : ''}
                         </div>
 
@@ -78,33 +82,35 @@ class App extends React.Component {
                     <div className="row">
 
                         <div className="col-sm-12 text-xs-center">
-                            <a style={{ fontFamily: 'Monoton', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/polls/'} >
-                                Poolster
+                            <a style={{ fontFamily: 'roboto', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/polls/'} >
+                                Voting app
                             </a>
                             <br /><br />
                         </div>
 
                     </div>
 
-                    {this.props.children}
+              <AppRouter/>
 
                     <div className="row">
                         <div className="col-sm-12 text-xs-center">
                             <br />
                             <a href="https://github.com/sebnun/polls">
-                                <FlatButton
-                                    label="Source Code"
-                                    icon={<FontIcon className="fa fa-github" />}
-                                    />
+                                <Button>
+                                    <>
+                                        <span><Icon className="fa fa-github" /></span>
+                                        <span>Source Code</span>
+                                    </>
+                                </Button>
                             </a>
                         </div>
                     </div>
 
                 </div>
-            </MuiThemeProvider>
+            </ThemeProvider>
 
         );
     }
 }
 
-export default App;
+export default withRouter(App);

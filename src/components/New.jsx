@@ -1,12 +1,12 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
-import { browserHistory } from 'react-router';
 
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import Paper from 'material-ui/Paper';
+
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 import Helmet from "react-helmet";
 
 class New extends React.Component {
@@ -71,7 +71,7 @@ class New extends React.Component {
 
         firebaseApp.database().ref().update(updates);
 
-        browserHistory.push(`/polls/poll/${newPollKey}`);
+        this.props.history.push(`/polls/poll/${newPollKey}`);
     }
 
     handleAddOption() {
@@ -88,11 +88,12 @@ class New extends React.Component {
                 <div key={i}>
                     <br />
                     <TextField
-                        floatingLabelText={`Option ${i + 1}`}
+                        label={`Option ${i + 1}`}
                         value={this.state.options[i].option}
                         onChange={this.handleOptionChange.bind(this, i)}
-                        errorText={this.state.options[i].optionError}
-                        />
+                        error={this.state.options[i].optionError!==''}
+                        helperText={this.state.options[i].optionError}
+                    />
                 </div>
             );
         });
@@ -110,28 +111,27 @@ class New extends React.Component {
                         <form onSubmit={this.handleSubmit}>
 
                             <TextField
-                                floatingLabelText="Title"
+                                label="Title"
                                 value={this.state.title}
                                 onChange={this.handleTitleChange}
-                                errorText={this.state.titleError}
-                                />
+                                error={this.state.titleError!==''}
+                                helperText={this.state.titleError}
+                            />
 
                             {options}
 
                             <br />
-                            <FloatingActionButton
-                                mini={true}
-                                secondary={true}
-                                onTouchTap={this.handleAddOption} >
-                                <ContentAdd />
-                            </FloatingActionButton>
+                            <Fab
+                                color="secondary"
+                                onClick={this.handleAddOption} >
+                                <Icon className="fa fa-plus"></Icon>
+                            </Fab>
 
                             <br /><br />
-                            <RaisedButton
-                                label="Create"
+                            <Button variant="contained"
                                 type="submit"
-                                primary={true}
-                                />
+                                color="primary"
+                            >Create</Button>
                         </form>
 
                         <br /><br />
