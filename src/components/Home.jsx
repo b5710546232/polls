@@ -10,17 +10,6 @@ import Paper from '@material-ui/core/Paper';
 
 class Home extends React.Component {
 
-  handleFacebook(e) {
-    e.preventDefault();
-    const provider = new firebase.auth.FacebookAuthProvider();
-    firebaseApp.auth().signInWithPopup(provider).then((result) => {
-      //console.log('Facebook login success');
-      this.props.history.push('/polls/dashboard');
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
-
   handleGoogle(e) {
     e.preventDefault();
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -43,42 +32,38 @@ class Home extends React.Component {
 
             <br /><br />
             <h2>Create and share polls, fast and easy. View results in real time!</h2>
-
             <br /><br />
             <Button variant="contained"
-              label="Login with Facebook"
-              onClick={this.handleFacebook}
-              color="secondary"
-              className="buttonWidth"
-            ><Icon className="fa fa-facebook-f" /></Button>
-            <br /><br />
-            <Button variant="contained"
-              label="Login with Google"
               onClick={this.handleGoogle}
               color="secondary"
               className="buttonWidth"
-            ><Icon className="fa fa-google" /></Button>
-            {/* 
+            >
+              <Icon className="fa fa-google" /> 
+              <span style={{marginLeft:"8px"}}>Login with Google</span>
+            </Button>
 
             <br /><br />
             <Link to="/polls/login">
               <Button variant="contained"
-                label="Login with Email"
+                label=""
                 color="secondary"
-                icon={<Icon className="fa fa-envelope-o" />}
                 className="buttonWidth"
-              />
+              >
+                  <Icon className="fa fa-envelope-o" />
+                <span style={{marginLeft:"8px"}}>Login with Email</span>
+              </Button>
             </Link>
             <br /><br />
             <Link to="/polls/signup">
               <Button variant="contained"
-                label="Sign Up"
-                primary={true}
+                color="primary"
                 className="buttonWidth"
-              />
+              >
+              Sign Up
+              </Button>
             </Link>
             <br /><br />
-            <br /><br /> */}
+            <br /><br />
           </Paper>
 
         </div>
@@ -89,5 +74,5 @@ class Home extends React.Component {
 }
 
 
-export default withRouter(Home);
+export default Home;
 

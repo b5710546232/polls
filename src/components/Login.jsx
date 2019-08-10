@@ -6,7 +6,7 @@ import Helmet from "react-helmet";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-
+import {withRouter} from 'react-router-dom'
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -65,36 +65,43 @@ class Login extends React.Component {
 
             <form onSubmit={this.handleSubmit}>
 
-              <TextField
-                floatingLabelText="Email"
+            <TextField
+               margin="normal"
+              error={this.state.emailError!==''}
+                label="Email"
                 value={this.state.email}
                 onChange={this.handleEmailChange}
-                errorText={this.state.emailError}
+                helperText={this.state.emailError}
               />
 
               <br /><br />
-              <TextField
-                floatingLabelText="Password"
+            
+
+            <TextField
+                label="Password"
                 value={this.state.password}
                 onChange={this.handlePasswordChange}
                 type="password"
-                errorText={this.state.passwordError}
+                error={this.state.passwordError!==''}
+                helperText={this.state.passwordError}
               />
 
               <br /><br />
               <Button variant="contained"
-                label="Login"
                 type="submit"
-                primary={true}
-              />
+                color="primary"
+              >
+              Login
+              </Button>
 
             </form>
 
             <br />
             <Link to="/polls/recover">
               <Button
-                label="Forgot your password?"
-              />
+              >
+              Forgot your password?
+              </Button>
             </Link>
 
             <br /><br />

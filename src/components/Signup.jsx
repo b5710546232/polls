@@ -4,8 +4,9 @@ import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import {TextField,FormControl,Input,InputLabel,FormHelperText} from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
+import { withRouter } from "react-router-dom";
 
 class Signup extends React.Component {
   constructor(props) {
@@ -60,30 +61,33 @@ class Signup extends React.Component {
             <h2>Signup</h2>
 
             <form onSubmit={this.handleSubmit}>
-
               <TextField
-                floatingLabelText="Email"
+               margin="normal"
+              error={this.state.emailError!==''}
+                label="Email"
                 value={this.state.email}
                 onChange={this.handleEmailChange}
-                errorText={this.state.emailError}
+                helperText={this.state.emailError}
               />
 
               <br /><br />
 
               <TextField
-                floatingLabelText="Password"
+                label="Password"
                 value={this.state.password}
                 onChange={this.handlePasswordChange}
                 type="password"
-                errorText={this.state.passwordError}
+                error={this.state.passwordError!==''}
+                helperText={this.state.passwordError}
               />
 
               <br /><br />
               <Button variant="contained"
-                label="Signup"
                 type="submit"
-                primary={true}
-              />
+                color="primary"
+              >
+              Signup
+              </Button>
 
             </form>
             <br /><br />

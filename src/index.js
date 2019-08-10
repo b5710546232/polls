@@ -1,17 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, BrowserRouter as Router } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import App from './components/App';
-import Home from './components/Home';
-import Dashboard from './components/Dashboard';
-import Signup from './components/Signup';
-import Login from './components/Login';
-import Recover from './components/Recover';
-import New from './components/New';
-import Poll from './components/Poll';
-import Update from './components/Update';
-import NotFound from './components/NotFound';
+import { createBrowserHistory } from 'history';
+
 
 import './index.css';
 
@@ -22,19 +15,10 @@ import './index.css';
 //All client-based code can be tampered with, so this app relies on server-side validation of data on the firebase side
 
 ReactDOM.render(
-  <Router >
-    <Route path='/polls/' component={App}>
-      <Route component={Home} />
-      {/* <Route path="/polls/dashboard" component={Dashboard} />
-      <Route path="/polls/signup" component={Signup} />
-      <Route path="/polls/login" component={Login} />
-      <Route path="/polls/recover" component={Recover} />
-      <Route path="/polls/new" component={New} />
-      <Route path="/polls/update/:pollId" component={Update} />
-      <Route path="/polls/poll/:pollId" component={Poll} />
-      <Route path="/polls/*" component={NotFound} /> */}
-    </Route>
-  </Router>,
+  <Router history={createBrowserHistory}>
+    <App>
+    </App>
+  </Router >,
   document.getElementById('root')
 );
 

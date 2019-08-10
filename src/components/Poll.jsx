@@ -10,6 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import { Chart } from 'react-google-charts';
 import Loading from './Loading';
 
+import { withRouter } from "react-router-dom";
+
 class Poll extends React.Component {
     constructor(props) {
         super(props);
@@ -17,14 +19,14 @@ class Poll extends React.Component {
         this.state = {
             title: '',
             options: [], //of the form [{'some option': 34}]
-            voted: localStorage.getItem(this.props.params.pollId) ? true : false,
+            voted: localStorage.getItem(this.props.match.params.pollId) ? true : false,
             showSnackbar: false,
             loading: true
         };
     }
 
     componentDidMount() {
-        this.pollRef = firebaseApp.database().ref(`polls/${this.props.params.pollId}`);
+        this.pollRef = firebaseApp.database().ref(`polls/${this.props.match.params.pollId}`);
         this.pollRef.on('value', ((snapshot) => {
             const dbPoll = snapshot.val();
 
@@ -48,8 +50,8 @@ class Poll extends React.Component {
             return o.hasOwnProperty(option);
         })[0][option];
 
-        firebaseApp.database().ref().update({ [`polls/${this.props.params.pollId}/${option}`]: currentCount += 1 })
-        localStorage.setItem(this.props.params.pollId, 'true');
+        firebaseApp.database().ref().update({ [`polls/${this.props.match.params.pollId}/${option}`]: currentCount += 1 })
+        localStorage.setItem(this.props.match.params.pollId, 'true');
         this.setState({ voted: true, showSnackbar: true });
     }
 
@@ -67,12 +69,11 @@ class Poll extends React.Component {
         if (isAuthUser) {
             addOptionUI = (
                 <div>
-                    <a href={`/polls/update/${this.props.params.pollId}`} >
+                    <a href={`/polls/update/${this.props.match.params.pollId}`} >
                         <Fab
-                            mini={true}
-                            secondary={true}
+                            color="secondary"
                         >
-                            <Icon>add</Icon>
+                            <Icon className="fa fa-plus"></Icon>
                         </Fab>
                     </a>
                 </div>
@@ -83,12 +84,13 @@ class Poll extends React.Component {
             return (
                 <div key={Object.keys(option)[0]}>
                     <Button variant="contained"
-                        label={Object.keys(option)[0]}
                         onClick={() => this.handleVote(Object.keys(option)[0])}
                         style={{ width: '90%' }}
                         disabled={this.state.voted}
-                        secondary={true}
-                    />
+                        color="secondary"
+                    >
+                        {Object.keys(option)[0]}
+                    </Button>
                     <br /><br />
                 </div>
             );

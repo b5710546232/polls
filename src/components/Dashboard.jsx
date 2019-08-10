@@ -5,10 +5,8 @@ import Helmet from "react-helmet";
 
 
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Dialog from '@material-ui/core/Dialog';
-import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
+import {IconButton,Icon,Paper,Divider,DialogTitle,DialogActions,Dialog} from '@material-ui/core';
+
 import Loading from './Loading';
 
 class Dashboard extends React.Component {
@@ -114,32 +112,37 @@ class Dashboard extends React.Component {
 
         const actions = [
             <Button
-                label="Cancel"
-                primary={false}
+                key="cancel"
+             color="primary"
                 onClick={this.handleClose}
-            />,
+            >
+                Cancel
+                </Button>,
             <Button
-                label="Delete"
-                primary={true}
+            key="delete"
+            color="secondary"
                 onClick={this.handleDelete}
-            />,
+            >
+                Delete
+            </Button>,
         ];
 
         let pollsUIs = this.state.polls.map((poll) => {
             return (
                 <div key={poll.id} >
-
                     <IconButton
-                        iconClassName="fa fa-trash"
                         tooltip={<span>Delete</span>}
                         onClick={() => this.handleOpen(poll.id)}
 
-                    />
+                    >
+                    <Icon className="fa fa-trash"/>
+                    </IconButton>
                     <Link to={`/polls/poll/${poll.id}`}>
                         <Button
-                            label={poll.title}
                             style={{ textAlign: 'left', width: '50%' }}
-                        />
+                        >
+                            {poll.title}
+                        </Button>
                     </Link>
                     <Divider />
 
@@ -160,19 +163,24 @@ class Dashboard extends React.Component {
                         <br />
 
                         <Dialog
-                            actions={actions}
                             modal={false}
                             open={this.state.dialogOpen}
                             onRequestClose={this.handleClose}
                         >
-                            Delete "{this.poll2DeleteTitle}"?
+                            <DialogTitle id="alert-dialog-title">Delete "{this.poll2DeleteTitle}"?</DialogTitle>
+                            <DialogActions>
+         {actions}
+        </DialogActions>
+
                     </Dialog>
 
                         <Link to="/polls/new">
                             <Button variant="contained"
-                                label="New Poll"
-                                primary={true}
-                            />
+                                color="primary"
+                            >
+                                New Poll
+                            </Button>
+
                         </Link>
                         <br /><br />
 

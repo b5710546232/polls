@@ -88,10 +88,11 @@ class New extends React.Component {
                 <div key={i}>
                     <br />
                     <TextField
-                        floatingLabelText={`Option ${i + 1}`}
+                        label={`Option ${i + 1}`}
                         value={this.state.options[i].option}
                         onChange={this.handleOptionChange.bind(this, i)}
-                        errorText={this.state.options[i].optionError}
+                        error={this.state.options[i].optionError!==''}
+                        helperText={this.state.options[i].optionError}
                     />
                 </div>
             );
@@ -110,28 +111,27 @@ class New extends React.Component {
                         <form onSubmit={this.handleSubmit}>
 
                             <TextField
-                                floatingLabelText="Title"
+                                label="Title"
                                 value={this.state.title}
                                 onChange={this.handleTitleChange}
-                                errorText={this.state.titleError}
+                                error={this.state.titleError!==''}
+                                helperText={this.state.titleError}
                             />
 
                             {options}
 
                             <br />
                             <Fab
-                                mini={true}
-                                secondary={true}
+                                color="secondary"
                                 onClick={this.handleAddOption} >
-                                <Icon>add</Icon>
+                                <Icon className="fa fa-plus"></Icon>
                             </Fab>
 
                             <br /><br />
                             <Button variant="contained"
-                                label="Create"
                                 type="submit"
-                                primary={true}
-                            />
+                                color="primary"
+                            >Create</Button>
                         </form>
 
                         <br /><br />

@@ -43,7 +43,7 @@ class Recover extends React.Component {
         <h2>We'll send you an email to reset your password.</h2>
 
         <TextField
-          floatingLabelText="Email"
+          label="Email"
           value={this.state.email}
           onChange={this.handleEmailChange}
           errorText={this.state.emailError}
@@ -51,10 +51,11 @@ class Recover extends React.Component {
 
         <br /><br />
         <Button variant="contained"
-          label="Send Verification Email"
           type="submit"
-          primary={true}
-          />
+          color="primary"
+          >
+            Send Verification Email
+            </Button>
 
       </form>
     );
