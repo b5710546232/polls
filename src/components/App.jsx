@@ -19,19 +19,34 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            loggedIn: (null !== firebaseApp.auth().currentUser) //currentUser is null when not loggedin 
+            loggedIn: false, //currentUser is null when not loggedin 
+            currentUser:null,
+            userEmail:``,
+            isAdmin:false
         };
         this.handleLogout = this.handleLogout.bind(this)
         console.log(this.props.history)
     }
 
+    checkIsAdmin(uid) {
+        this.adminRef = firebaseApp.database().ref(`admin/${uid}`);
+        this.adminRef.on('value', (snapshot) => { 
+            console.log(`admin-snap`, snapshot.val(), uid)
+            const isAdmin= snapshot.val()
+            this.setState({isAdmin})
+        })
+    }
+
     componentDidMount() {
         firebaseApp.auth().onAuthStateChanged(user => {
+            console.log(`user`,user)
             this.setState({
-                loggedIn: (null !== user) //user is null when not loggedin 
+                loggedIn: (null !== user), //user is null when not loggedin ,
+                currentUser: user,
+                userEmail:user.email
             })
+            this.checkIsAdmin(user.uid)
         });
     }
 
@@ -39,6 +54,10 @@ class App extends React.Component {
         firebaseApp.auth().signOut().then(() => {
             //console.log("sign out succesful");
             this.props.history.push('/');
+            this.setState({
+                userEmail: ``,
+                loggedIn:false
+            })
         }, (error) => {
             console.log(error);
         });
@@ -54,7 +73,7 @@ class App extends React.Component {
 
                         <div className="col-sm-6 text-xs-left">
                             <br />
-                            {this.state.loggedIn ?
+                            {this.state.isAdmin ?
                                 <Link to="/polls/dashboard">
                                     <Button
                                         color="primary"
@@ -67,6 +86,7 @@ class App extends React.Component {
 
                         <div className="col-sm-6 text-xs-right">
                             <br />
+                            {this.state.userEmail}
                             {this.state.loggedIn ?
                                 <Button
                                     onClick={this.handleLogout}
@@ -82,7 +102,7 @@ class App extends React.Component {
                     <div className="row">
 
                         <div className="col-sm-12 text-xs-center">
-                            <a style={{ fontFamily: 'roboto', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/polls/'} >
+                            <a style={{ fontFamily: 'roboto', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/'} >
                                 Voting app
                             </a>
                             <br /><br />
@@ -90,7 +110,7 @@ class App extends React.Component {
 
                     </div>
 
-              <AppRouter/>
+                    <AppRouter isAdmin={this.state.isAdmin} />
 
                     <div className="row">
                         <div className="col-sm-12 text-xs-center">

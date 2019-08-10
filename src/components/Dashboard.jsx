@@ -149,49 +149,51 @@ class Dashboard extends React.Component {
                 </div>
             );
         });
-
+        
+        
+        
         return (
             <div className="row">
-                <div className="col-sm-12 text-xs-center">
+        <div className="col-sm-12 text-xs-center">
 
-                    <Helmet title="Dashboard" />
+            <Helmet title="Dashboard" />
 
-                    <Paper>
+            <Paper>
 
-                        <br />
-                        <h2>Your Polls</h2>
-                        <br />
+                <br />
+                <h2>Your Polls</h2>
+                <br />
 
-                        <Dialog
-                            modal={false}
-                            open={this.state.dialogOpen}
-                            onRequestClose={this.handleClose}
-                        >
-                            <DialogTitle id="alert-dialog-title">Delete "{this.poll2DeleteTitle}"?</DialogTitle>
-                            <DialogActions>
-         {actions}
-        </DialogActions>
+                <Dialog
+                    modal={false}
+                    open={this.state.dialogOpen}
+                    onRequestClose={this.handleClose}
+                >
+                    <DialogTitle id="alert-dialog-title">Delete "{this.poll2DeleteTitle}"?</DialogTitle>
+                    <DialogActions>
+ {actions}
+</DialogActions>
 
-                    </Dialog>
+            </Dialog>
 
-                        <Link to="/polls/new">
-                            <Button variant="contained"
-                                color="primary"
-                            >
-                                New Poll
-                            </Button>
+                <Link to="/polls/new">
+                    <Button variant="contained"
+                        color="primary"
+                    >
+                        New Poll
+                    </Button>
 
-                        </Link>
-                        <br /><br />
+                </Link>
+                <br /><br />
 
-                        {pollsUIs}
+                {pollsUIs}
 
-                        <Loading loading={this.state.loading} />
+                <Loading loading={this.state.loading} />
 
-                        <br /><br />
-                    </Paper>
-                </div>
-            </div>
+                <br /><br />
+            </Paper>
+        </div>
+        </div>
         );
     }
 }

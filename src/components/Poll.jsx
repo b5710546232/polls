@@ -9,7 +9,6 @@ import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import { Chart } from 'react-google-charts';
 import Loading from './Loading';
-
 import { withRouter } from "react-router-dom";
 
 class Poll extends React.Component {
@@ -19,30 +18,81 @@ class Poll extends React.Component {
         this.state = {
             title: '',
             options: [], //of the form [{'some option': 34}]
-            voted: localStorage.getItem(this.props.match.params.pollId) ? true : false,
+            canVote: false,
             showSnackbar: false,
-            loading: true
+            loggedIn: false,
+            currentUser:null,
+            loading: true,
+            isAdmin:false
         };
+        console.log(this.state.canVote)
+    }
+    checkIsAdmin(uid) {
+        this.adminRef = firebaseApp.database().ref(`admin/${uid}`);
+        this.adminRef.on('value', (snapshot) => { 
+            console.log(`admin-snap`, snapshot.val(), uid)
+            const isAdmin= snapshot.val()
+            this.setState({isAdmin})
+        })
+    }
+
+    checkIsAbleTocanVote(uid) {
+        // http://localhost:3000/polls/poll/-LluqIbVKCXdaUFsX4dO
+        // this.setState({canVote:true})
+        // return
+        
+        try {
+            this.votesRef = firebaseApp.database().ref(`voters/${uid}`);
+            this.votesRef.on('value', (snapshot) => {
+                const dbVoters = snapshot.val() || {}
+                console.log(`dbVoters`,dbVoters)
+                const pollID = this.props.match.params.pollId
+                let checkAlreadyVote = true
+                console.log(`dbVoters.hasOwnProperty(this.uid)`,dbVoters.hasOwnProperty(pollID))
+                checkAlreadyVote = !dbVoters.hasOwnProperty(pollID)
+                let canVoteWithAuth = this.state.loggedIn && checkAlreadyVote
+                console.log(`checkIsAbleTocanVote`,canVoteWithAuth,this.state.canVote)
+                this.setState({canVote:canVoteWithAuth})
+                
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+
     }
 
     componentDidMount() {
+
+        firebaseApp.auth().onAuthStateChanged(user => {
+            this.setState({
+                loggedIn: (null !== user), //user is null when not loggedin ,
+                currentUser:user
+            })
+            let uid = user.uid || ''
+            this.checkIsAbleTocanVote(uid)
+            this.checkIsAdmin(uid)
+        });
         this.pollRef = firebaseApp.database().ref(`polls/${this.props.match.params.pollId}`);
         this.pollRef.on('value', ((snapshot) => {
-            const dbPoll = snapshot.val();
+        const dbPoll = snapshot.val();
 
-            const options = Object.keys(dbPoll).reduce((a, key) => {
-                if (key !== 'title') {
-                    a.push({ [key]: dbPoll[key] }); //[key] is an es6 computed property name
-                }
-                return a;
-            }, []);
+        const options = Object.keys(dbPoll).reduce((a, key) => {
+            if (key !== 'title') {
+                a.push({ [key]: dbPoll[key] }); //[key] is an es6 computed property name
+            }
+            return a;
+        }, []);
 
-            this.setState({ title: dbPoll.title, options: options, loading: false })
+        this.setState({ title: dbPoll.title, options: options, loading: false })
         })).bind(this);
     }
 
     componentWillUnmount() {
         this.pollRef.off();
+        this.votesRef.off();
+        this.adminRef.off();
+
     }
 
     handleVote(option) {
@@ -50,9 +100,29 @@ class Poll extends React.Component {
             return o.hasOwnProperty(option);
         })[0][option];
 
-        firebaseApp.database().ref().update({ [`polls/${this.props.match.params.pollId}/${option}`]: currentCount += 1 })
-        localStorage.setItem(this.props.match.params.pollId, 'true');
-        this.setState({ voted: true, showSnackbar: true });
+        // // Write the new poll's data simultaneously in the polls list and the user's polls list.
+        // var updates = {};
+        // updates[`/polls/${newPollKey}`] = pollData;
+        // updates[`/user-polls/${uid}/${newPollKey}`] = true;
+
+        // firebaseApp.database().ref().update(updates);
+
+        let updates = {};
+        // votes>{pollID}>{uid:true}
+        try {
+            const uid = firebaseApp.auth().currentUser.uid;
+            updates[`voters/${uid}/${this.props.match.params.pollId}`] = true
+            updates[`polls/${this.props.match.params.pollId}/${option}`] =  currentCount += 1 
+            // firebaseApp.database().ref().update()
+            // firebaseApp.database().ref().update({ [`polls/${this.props.match.params.pollId}/${option}`]: currentCount += 1 })
+            firebaseApp.database().ref().update(updates);
+            localStorage.setItem(this.props.match.params.pollId, 'true');
+            this.setState({ canVote: false, showSnackbar: true });    
+        }
+        catch(error){
+            console.error(error)
+        }
+        
     }
 
     render() {
@@ -64,9 +134,10 @@ class Poll extends React.Component {
 
         //let isAuthUser = getLocalUserId() ? true : false;
         let isAuthUser = firebaseApp.auth().currentUser ? true : false;
+        let isAdminUser = this.state.isAdmin
 
         let addOptionUI;
-        if (isAuthUser) {
+        if (isAdminUser) {
             addOptionUI = (
                 <div>
                     <a href={`/polls/update/${this.props.match.params.pollId}`} >
@@ -86,7 +157,7 @@ class Poll extends React.Component {
                     <Button variant="contained"
                         onClick={() => this.handleVote(Object.keys(option)[0])}
                         style={{ width: '90%' }}
-                        disabled={this.state.voted}
+                        disabled={!this.state.canVote}
                         color="secondary"
                     >
                         {Object.keys(option)[0]}

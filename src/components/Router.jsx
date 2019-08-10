@@ -10,12 +10,13 @@ import Login from './Login'
 import New from './New'
 import NotFound from './NotFound'
 
-export default ()=>{
+export default (props) => {
+    console.log(`props`,props)
     return(
         <Switch>
             <Route key="/" exact path="/" component={Home} />
             <Route key="/polls/signup" path="/polls/signup" component={Signup} />
-            <Route key="/polls/dashboard" path="/polls/dashboard" component={Dashboard} />
+            <Route key="/polls/dashboard" path="/polls/dashboard" component={ Dashboard} isAdmin={props.isAdmin} />
             <Route path="/polls/update/:pollId" component={Update} />
             <Route path="/polls/login" component={Login} />
             {/* <Route path="/polls/recover" component={Recover} /> */}
