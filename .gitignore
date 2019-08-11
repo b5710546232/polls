@@ -18,3 +18,4 @@ npm-debug.log
 typings
 
 *.firebase/**
+.firebase/hosting.YnVpbGQ.cache
