@@ -60,7 +60,7 @@ class Poll extends React.Component {
                 loggedIn: (null !== user), //user is null when not loggedin ,
                 currentUser:user
             })
-            let uid = user.uid || ''
+            let {uid} = user || ''
             this.checkIsAbleTocanVote(uid)
         });
         this.pollRef = firebaseApp.database().ref(`polls/${this.props.match.params.pollId}`);
@@ -197,6 +197,7 @@ class Poll extends React.Component {
                         <br /><br />
 
                     </Paper>
+                    <br /><br />
                 </div>
             </div>
         );

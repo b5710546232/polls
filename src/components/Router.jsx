@@ -16,7 +16,9 @@ export default (props) => {
         <Switch>
             <Route key="/" exact path="/" component={Home} />
             <Route key="/polls/signup" path="/polls/signup" component={Signup} />
-            <Route key="/polls/dashboard" path="/polls/dashboard" component={ Dashboard} isAdmin={props.isAdmin} />
+            <Route key="/polls/dashboard" path="/polls/dashboard"
+                render={(routeProps) => <Dashboard {...routeProps} isAdmin={props.isAdmin} />}
+            />
             <Route path="/polls/update/:pollId" component={Update} />
             <Route path="/polls/login" component={Login} />
             {/* <Route path="/polls/recover" component={Recover} /> */}

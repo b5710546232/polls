@@ -31,7 +31,7 @@ class Home extends React.Component {
           <Paper>
 
             <br /><br />
-            <h2>Create and share polls, fast and easy. View results in real time!</h2>
+            <h2>Just vote and view results in real time!</h2>
             <br /><br />
             <Button variant="contained"
               onClick={(event)=>{this.handleGoogle(event)}}
@@ -59,7 +59,7 @@ class Home extends React.Component {
                 color="primary"
                 className="buttonWidth"
               >
-              Sign Up
+              Register
               </Button>
             </Link>
             <br /><br />

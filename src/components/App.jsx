@@ -67,6 +67,10 @@ class App extends React.Component {
         this.adminRef.off();
     }
 
+    componentWillReceiveProps() {
+        window.previousLocation = this.props.location
+      }
+
     handleLogout() {
         firebaseApp.auth().signOut().then(() => {
             //console.log("sign out succesful");

@@ -54,11 +54,11 @@ class Signup extends React.Component {
       <div className="row">
         <div className="col-sm-12 text-xs-center">
 
-          <Helmet title="Signup" />
+          <Helmet title="Register" />
 
           <Paper>
             <br /><br />
-            <h2>Signup</h2>
+            <h2>Register</h2>
 
             <form onSubmit={this.handleSubmit}>
               <TextField
@@ -86,7 +86,7 @@ class Signup extends React.Component {
                 type="submit"
                 color="primary"
               >
-              Signup
+              Register
               </Button>
 
             </form>

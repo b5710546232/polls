@@ -31,6 +31,9 @@ class Login extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebaseApp.auth().signInWithPopup(provider).then((result) => {
       //console.log('Google login success');
+      if (window.previousLocation != null) {
+        console.log(`window.previousLocation`,window.previousLocation)
+      }
       this.props.history.push('/polls/dashboard');
     }).catch((error) => {
       console.log(error);
@@ -117,8 +120,16 @@ class Login extends React.Component {
               Forgot your password?
               </Button>
             </Link>
-            <br/><br/>
-
+            <br /><br />
+            <Link to="/polls/signup">
+              <Button variant="contained"
+                color="primary"
+                className="buttonWidth"
+              >
+              Register
+              </Button>
+            </Link>
+            <br /><br />
             <Button variant="contained"
               onClick={(event)=>{this.handleGoogle(event)}}
               color="secondary"

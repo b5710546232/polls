@@ -17,7 +17,8 @@ class Dashboard extends React.Component {
         this.state = {
             dialogOpen: false,
             loading: true,
-            polls: [] //items like { id: 34324, title: 'sdf'}
+            publicPolls:[],
+            polls: [] //items like { id: 34324, title: 'sdf'},
         };
 
         this.poll2Delete = '';
@@ -29,9 +30,57 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
         //const uid = getLocalUserId();
+        this.publicPollsRef = firebaseApp.database().ref(`polls/`);
+
+          //check if user has no polls to quit loading indicator
+          this.publicPollsRef.once('value').then(snapshot => {
+            if (!snapshot.hasChildren()) {
+                if (this.mounted) {
+                    this.setState({ loading: false });
+                }
+            }
+        });
+
+        this.publicPollsRef.on('child_added', ((newPollIdSnapshot) => {
+            const pollId = newPollIdSnapshot.key;
+
+
+            firebaseApp.database().ref(`polls/${pollId}/title`).once('value').then(snapshot => {
+                const title = snapshot.val();
+
+                const publicPolls = this.state.publicPolls;
+                publicPolls.push({ title: title, id: pollId })
+                console.log(`publicPolls`,publicPolls)
+
+                if (this.mounted) {
+                    this.setState({
+                        publicPoll: publicPolls,
+                        loading: false
+                    });
+                }
+            });
+
+        })).bind(this);
+
+
+        this.publicPollsRef.on('child_removed', ((removedPollIdSnapshot) => {
+            const pollId = removedPollIdSnapshot.key;
+            const publicPolls = this.state.publicPolls.filter(poll => poll.id !== pollId);
+
+            if (this.mounted) {
+                this.setState({
+                    publicPolls: publicPolls
+                });
+            }
+
+        })).bind(this);
+
+
+
+
 
         firebaseApp.auth().onAuthStateChanged(user => {
-            if (user) { //this can get called after componentWillUnmount, make sure its there to avoid errors
+            if (user ) { //this can get called after componentWillUnmount, make sure its there to avoid errors
 
                 const uid = user.uid;
 
@@ -108,8 +157,46 @@ class Dashboard extends React.Component {
         this.setState({ dialogOpen: false });
     }
 
-    render() {
+    renderUser()
+    {
+        let pollsUIs = this.state.publicPolls.map((poll) => {
+            return (
+                <div key={poll.id} >
+                    <Link to={`/polls/poll/${poll.id}`}>
+                        <Button
+                            style={{ textAlign: 'left', width: '50%' }}
+                        >
+                            {poll.title}
+                        </Button>
+                    </Link>
+                    <Divider />
 
+                </div>
+            );
+        });
+        return(
+            <div className="row">
+            <div className="col-sm-12 text-xs-center">
+
+                <Helmet title="Dashboard" />
+
+                <Paper>
+
+                    <br />
+                    <h2>All Polls</h2>
+                    <br />
+                        
+                    {pollsUIs}
+                    <br /><br />
+
+                <Loading loading={this.state.loading} />            
+                </Paper>
+            </div >
+            </div>
+        )
+    }
+
+    renderAdmin() {
         const actions = [
             <Button
                 key="cancel"
@@ -149,11 +236,7 @@ class Dashboard extends React.Component {
                 </div>
             );
         });
-        
-        
-        
-        return (
-            <div className="row">
+        return ( <div className="row">
         <div className="col-sm-12 text-xs-center">
 
             <Helmet title="Dashboard" />
@@ -195,6 +278,14 @@ class Dashboard extends React.Component {
         </div>
         </div>
         );
+    }
+
+    render() {    
+        return (
+            <>
+                {this.props.isAdmin ?  this.renderAdmin()  : this.renderUser() }
+            </>
+        )
     }
 }
 
