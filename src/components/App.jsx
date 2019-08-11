@@ -15,6 +15,18 @@ const muiTheme = createMuiTheme({
     }
 });
 
+const LoginButton = () =>{
+    return(
+        <Link to="/polls/login">
+        <Button
+        color="secondary"
+        >
+            Login
+        </Button>
+    </Link>
+    )
+}
+
 class App extends React.Component {
 
     constructor(props) {
@@ -40,14 +52,19 @@ class App extends React.Component {
 
     componentDidMount() {
         firebaseApp.auth().onAuthStateChanged(user => {
-            console.log(`user`,user)
+            console.log(`user`, user)
+            const { email,uid } = user || ``
             this.setState({
                 loggedIn: (null !== user), //user is null when not loggedin ,
                 currentUser: user,
-                userEmail:user.email
+                userEmail: email
             })
-            this.checkIsAdmin(user.uid)
+            this.checkIsAdmin(uid)
         });
+    }
+
+    componentWillUnmount() {
+        this.adminRef.off();
     }
 
     handleLogout() {
@@ -64,6 +81,11 @@ class App extends React.Component {
     }
 
     render() {
+
+        const { pathname } = this.props.location
+        const isIndexPath = pathname === `/`
+        const isLoginPath = pathname === `/polls/login`
+        console.log(`curr`,pathname,isLoginPath)
         // console.log(`this.props.children`, this.props.children)
         return (
             <ThemeProvider theme={muiTheme}>
@@ -93,8 +115,10 @@ class App extends React.Component {
                                     color="secondary"
                                 >
                                     Logout
-                                    </Button>
-                                : ''}
+                                 </Button>
+                                :
+                                <>{ !(isIndexPath || isLoginPath) && <LoginButton/> }</>
+                                }
                         </div>
 
                     </div>
@@ -111,20 +135,6 @@ class App extends React.Component {
                     </div>
 
                     <AppRouter isAdmin={this.state.isAdmin} />
-
-                    <div className="row">
-                        <div className="col-sm-12 text-xs-center">
-                            <br />
-                            <a href="https://github.com/sebnun/polls">
-                                <Button>
-                                    <>
-                                        <span><Icon className="fa fa-github" /></span>
-                                        <span>Source Code</span>
-                                    </>
-                                </Button>
-                            </a>
-                        </div>
-                    </div>
 
                 </div>
             </ThemeProvider>

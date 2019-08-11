@@ -1,11 +1,12 @@
 import React from 'react';
 import { firebaseApp } from '../utils/firebase';
+import * as firebase from 'firebase'; //needed for fb, google providers
 import { Link } from 'react-router-dom';
 import Helmet from "react-helmet";
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
+
+import {TextField,Icon,Button,Paper} from '@material-ui/core';
+
 import {withRouter} from 'react-router-dom'
 class Login extends React.Component {
   constructor(props) {
@@ -21,6 +22,19 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
+
+    console.log(`this.props.history`,this.props.history)
+  }
+
+  handleGoogle(e) {
+    e.preventDefault();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebaseApp.auth().signInWithPopup(provider).then((result) => {
+      //console.log('Google login success');
+      this.props.history.push('/polls/dashboard');
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   handleEmailChange(e) {
@@ -103,8 +117,21 @@ class Login extends React.Component {
               Forgot your password?
               </Button>
             </Link>
+            <br/><br/>
 
+            <Button variant="contained"
+              onClick={(event)=>{this.handleGoogle(event)}}
+              color="secondary"
+              className="buttonWidth"
+            >
+              <Icon className="fa fa-google" /> 
+              <span style={{marginLeft:"8px"}}>Login with Google</span>
+            </Button>
+
+            
             <br /><br />
+            
+            
           </Paper>
         </div>
       </div>

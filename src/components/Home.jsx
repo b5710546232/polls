@@ -34,7 +34,7 @@ class Home extends React.Component {
             <h2>Create and share polls, fast and easy. View results in real time!</h2>
             <br /><br />
             <Button variant="contained"
-              onClick={this.handleGoogle}
+              onClick={(event)=>{this.handleGoogle(event)}}
               color="secondary"
               className="buttonWidth"
             >
