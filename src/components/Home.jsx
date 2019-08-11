@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
 import * as firebase from 'firebase'; //needed for fb, google providers
 import Helmet from "react-helmet";
@@ -15,6 +15,30 @@ class Home extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebaseApp.auth().signInWithPopup(provider).then((result) => {
       //console.log('Google login success');
+      this.props.history.push('/polls/dashboard');
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  handleGithub(e) {
+    e.preventDefault();
+    const provider = new firebase.auth.GithubAuthProvider();
+    firebaseApp.auth().signInWithPopup(provider).then((result) => {
+      //console.log('Github login success');
+      console.log(result)
+      this.props.history.push('/polls/dashboard');
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  handleMicrosoft(e) {
+    e.preventDefault();
+    const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    firebaseApp.auth().signInWithPopup(provider).then((result) => {
+      //console.log('Github login success');
+      console.log(result)
       this.props.history.push('/polls/dashboard');
     }).catch((error) => {
       console.log(error);
@@ -40,6 +64,26 @@ class Home extends React.Component {
             >
               <Icon className="fa fa-google" /> 
               <span style={{marginLeft:"8px"}}>Login with Google</span>
+            </Button>
+            
+            <br /><br />
+            <Button variant="contained"
+              onClick={(event)=>{this.handleGithub(event)}}
+              color="secondary"
+              className="buttonWidth"
+            >
+              <Icon className="fa fa-github" /> 
+              <span style={{marginLeft:"8px"}}>Login with Github</span>
+            </Button>
+
+            <br /><br />
+            <Button variant="contained"
+              onClick={(event)=>{this.handleMicrosoft(event)}}
+              color="secondary"
+              className="buttonWidth"
+            >
+              <Icon className="fa fa-windows" /> 
+              <span style={{marginLeft:"8px"}}>Login with Microsoft</span>
             </Button>
 
             <br /><br />

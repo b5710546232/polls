@@ -9,7 +9,6 @@ import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import { Chart } from 'react-google-charts';
 import Loading from './Loading';
-import { withRouter } from "react-router-dom";
 
 class Poll extends React.Component {
     constructor(props) {
@@ -128,7 +127,7 @@ class Poll extends React.Component {
         data.unshift(['option', 'votes']);
 
         //let isAuthUser = getLocalUserId() ? true : false;
-        let isAuthUser = firebaseApp.auth().currentUser ? true : false;
+        // let isAuthUser = firebaseApp.auth().currentUser ? true : false;
         let isAdminUser = this.props.isAdmin
 
         let addOptionUI;

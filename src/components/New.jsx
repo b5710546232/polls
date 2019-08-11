@@ -152,7 +152,7 @@ class New extends React.Component {
     formIsInvalid() {
 
         let isInvalid = false;
-        const regex = /[\.#\$\/\[\]]/;
+        const regex = /[.#$/[]]/;
         const title = this.state.title.trim();
 
         if (title.length === 0) {

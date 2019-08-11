@@ -158,7 +158,7 @@ class Update extends React.Component {
     formIsInvalid() {
 
         let isInvalid = false;
-        const regex = /[\.#\$\/\[\]]/;
+        const regex = /[.#$/[]]/;
 
         this.state.options.forEach((o, i) => {
 

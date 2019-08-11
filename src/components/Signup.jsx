@@ -4,9 +4,8 @@ import { firebaseApp } from '../utils/firebase';
 import Helmet from "react-helmet";
 
 import Button from '@material-ui/core/Button';
-import {TextField,FormControl,Input,InputLabel,FormHelperText} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import { withRouter } from "react-router-dom";
 
 class Signup extends React.Component {
   constructor(props) {

@@ -3,11 +3,8 @@ import { firebaseApp } from '../utils/firebase';
 import * as firebase from 'firebase'; //needed for fb, google providers
 import { Link } from 'react-router-dom';
 import Helmet from "react-helmet";
-
-
 import {TextField,Icon,Button,Paper} from '@material-ui/core';
 
-import {withRouter} from 'react-router-dom'
 class Login extends React.Component {
   constructor(props) {
     super(props);

@@ -3,7 +3,6 @@ import { Link,withRouter } from 'react-router-dom';
 import { firebaseApp } from '../utils/firebase';
 import { ThemeProvider } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 import { createMuiTheme } from '@material-ui/core/styles';
 import AppRouter from './Router'
 

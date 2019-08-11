@@ -75,12 +75,8 @@ class Dashboard extends React.Component {
 
         })).bind(this);
 
-
-
-
-
         firebaseApp.auth().onAuthStateChanged(user => {
-            if (user ) { //this can get called after componentWillUnmount, make sure its there to avoid errors
+            if (user) { //this can get called after componentWillUnmount, make sure its there to avoid errors
 
                 const uid = user.uid;
 

@@ -22,7 +22,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-{/* <Router history={browserHistory}>
+/*{ <Router history={browserHistory}>
     <Route path='/polls/' component={App}>
       <IndexRoute component={Home} />
       <Route path="/polls/dashboard" component={Dashboard} />
@@ -34,4 +34,4 @@ ReactDOM.render(
       <Route path="/polls/poll/:pollId" component={Poll} />
       <Route path="/polls/*" component={NotFound} />
     </Route>
-  </Router> */}
+  </Router> }*/
