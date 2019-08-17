@@ -37,6 +37,31 @@ class Login extends React.Component {
     });
   }
 
+
+  handleGithub(e) {
+    e.preventDefault();
+    const provider = new firebase.auth.GithubAuthProvider();
+    firebaseApp.auth().signInWithPopup(provider).then((result) => {
+      //console.log('Github login success');
+      console.log(result)
+      this.props.history.push('/polls/dashboard');
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  handleMicrosoft(e) {
+    e.preventDefault();
+    const provider = new firebase.auth.OAuthProvider('microsoft.com');
+    firebaseApp.auth().signInWithPopup(provider).then((result) => {
+      //console.log('Github login success');
+      console.log(result)
+      this.props.history.push('/polls/dashboard');
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   handleEmailChange(e) {
     this.setState({ email: e.target.value });
   }
@@ -136,8 +161,25 @@ class Login extends React.Component {
               <span style={{marginLeft:"8px"}}>Login with Google</span>
             </Button>
 
-            
             <br /><br />
+            <Button variant="contained"
+              onClick={(event)=>{this.handleGithub(event)}}
+              color="secondary"
+              className="buttonWidth"
+            >
+              <Icon className="fa fa-github" /> 
+              <span style={{marginLeft:"8px"}}>Login with Github</span>
+            </Button>
+
+            <br /><br />
+            <Button variant="contained"
+              onClick={(event)=>{this.handleMicrosoft(event)}}
+              color="secondary"
+              className="buttonWidth"
+            >
+              <Icon className="fa fa-windows" /> 
+              <span style={{marginLeft:"8px"}}>Login with Microsoft</span>
+            </Button>
             
             
           </Paper>

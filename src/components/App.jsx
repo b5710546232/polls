@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import { createMuiTheme } from '@material-ui/core/styles';
 import AppRouter from './Router'
 
+import AppLogo from '../assets/just_a_hackathon.png'
+
 const muiTheme = createMuiTheme({
     fontFamily: 'Roboto, sans-serif',
     palette: {
@@ -129,9 +131,15 @@ class App extends React.Component {
                     <div className="row">
 
                         <div className="col-sm-12 text-xs-center">
-                            <a style={{ fontFamily: 'roboto', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/'} >
+
+                            {/* <a style={{ fontFamily: 'roboto', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/'} >
                                 Voting app
-                            </a>
+                            </a> */}
+                            <a style={{ fontFamily: 'roboto', fontSize: "60px", textShadow: "2px 2px #ccc", color: "#DC3912", textDecoration: 'none' }} href={this.state.loggedIn ? '/polls/dashboard' : '/'} >
+                            <img style={
+                                {height:'150px'}
+                                } src={AppLogo} alt="Just a hackathon" />
+                                </a>
                             <br /><br />
                         </div>
 

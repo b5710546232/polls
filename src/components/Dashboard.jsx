@@ -78,9 +78,10 @@ class Dashboard extends React.Component {
         firebaseApp.auth().onAuthStateChanged(user => {
             if (user) { //this can get called after componentWillUnmount, make sure its there to avoid errors
 
-                const uid = user.uid;
-
-                this.userPollsRef = firebaseApp.database().ref(`user-polls/${uid}`);
+                // const uid = user.uid;
+                // firebaseApp.database().ref(`polls/`)
+                this.userPollsRef =firebaseApp.database().ref(`polls/`)
+                    // firebaseApp.database().ref(`user-polls/${uid}`);
 
                 //check if user has no polls to quit loading indicator
                 this.userPollsRef.once('value').then(snapshot => {
